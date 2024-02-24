@@ -35,7 +35,7 @@ export const getQueryById = async (req: Request, res: Response) => {
         let blog = await Queries.findOne({ _id: req.params.id });
         // const comme=await Comment.findOne({blogId:req.params.id});
         if (!blog) {
-          res.status(404).send({ error: "blog not found" });
+          res.status(404).send({ error: "Query not found" });
           return;
         }
         res.send(blog);
@@ -44,31 +44,31 @@ export const getQueryById = async (req: Request, res: Response) => {
       }
 };
 
-export const updateQuery = async (req: Request, res: Response) => {
-    try {
-        const query= await Queries.findOne({ _id: req.params.id });
-        if (!query) {
-          res.status(404).send({ error: "Blog not found" });
-          return;
-        }
-        if (req.body.name) {
-          query.name = req.body.name;
-        }
-        if (req.body.email) {
-          query.email = req.body.email;
-        }
-        if(req.body.query)
-        {
-            query.query = req.body.query;  
-        }
-        await query.save();
-        res.send(query);
-      } catch (error) {
-        res.status(500).send({ error: "Server error" });
-      }
-    };
+// export const updateQuery = async (req: Request, res: Response) => {
+//     try {
+//         const query= await Queries.findOne({ _id: req.params.id });
+//         if (!query) {
+//           res.status(404).send({ error: "Blog not found" });
+//           return;
+//         }
+//         if (req.body.name) {
+//           query.name = req.body.name;
+//         }
+//         if (req.body.email) {
+//           query.email = req.body.email;
+//         }
+//         if(req.body.query)
+//         {
+//             query.query = req.body.query;  
+//         }
+//         await query.save();
+//         res.send(query);
+//       } catch (error) {
+//         res.status(500).send({ error: "Server error" });
+//       }
+//     };
 
-export const deletePost = async (req: Request, res: Response) => {
+export const deleteQuery = async (req: Request, res: Response) => {
     try {
         const deletedQuery = await Queries.deleteOne({ _id: req.params.id });
         if (deletedQuery.deletedCount === 0) {

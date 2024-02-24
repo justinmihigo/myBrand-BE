@@ -2,19 +2,19 @@ import passport from 'passport';
 import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt';
 import User, { IUser } from '../models/User';
 
-const JWT_SECRET = 'TOP_SECRET';
+const JWT_SECRET = 'SECRET_KEY';
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: JWT_SECRET
 };
 
-const strategy = new Strategy(options, (payload:{user:IUser}, done:VerifiedCallback) => {
-  User.findOne({ email: payload.user.email })
+const strategy = new Strategy(options, (payload, done) => {
+  
+  User.findOne({ email: payload.email})
     .then((user) => {
       if (user) {
-        console.log(payload);
-        return done(null, user);
+        return done(null, payload);
       } else {
         return done(null, false);
       }

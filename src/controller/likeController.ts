@@ -3,6 +3,7 @@ import Like from "../models/Like";
 import upload from "../config/multer";
 import Blog from "../models/Blog";
 
+
 export const addLike= async(req:Request, res: Response)=>{
     
     const blogId= req.params.id;
@@ -17,7 +18,10 @@ export const addLike= async(req:Request, res: Response)=>{
     return res.status(200).json(blog);
    
 };
-
+export const getLikes= async(req:Request, res: Response)=>{
+    const like= await Blog.findOne({_id:req.params.id});
+    res.json({likes:like?.likes});
+}
 export const deleteLike= async(req: Request, res: Response)=>{
     try{
         const blogId= req.params.id;

@@ -69,29 +69,35 @@ export const register= async(req:Request, res: Response)=>{
 }
 export const login= async(req:Request, res:Response, next:NextFunction)=>{
     try{
-    const {username, email, password}= req.body;
-
-    const user= await User.findOne({username});
+    const {email, password}= req.body;
+        
+    const user= await User.findOne({email:email});
+    const username= user?.username;
+    const id=user?._id;
     if(!user){
         res.send(400).send("User not found");
     }
     const hashedPassword=user?.password as string;
     const isMatch = await bcrypt.compare(password, hashedPassword);
     if(isMatch){
-    const token= jwt.sign({username, email},"SECRET_KEY");
+    const token= jwt.sign({id,username, email},"SECRET_KEY");
         res.header('Authorization', `Bearer ${token}`);
-        res.status(201).send({message:"Login successfull", token:token});
+        res.status(201).send({message:"Login successfull", token:token, id:id});
     }
     else{
         res.status(400).send("password doesn't match");
+        return;
     }
 }
 catch(err){
-    res.status(500).send({message:'server error'});
+    res.status(500);
 }
-next();
 }
 export const secureRoute= async(req:Request, res:Response, next:NextFunction)=>{
-    passport.authenticate("jwt",{session:false});
-    res.json({ message: 'Welcome, ',use:req});
+    // passport.authenticate("jwt",{session:false});
+    const isAuth=(req.isAuthenticated());
+    res.json({ message: 'Welcome you are authorized ',
+    user:req.user, 
+    isAuthenticated:isAuth,
+});
 }

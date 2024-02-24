@@ -13,7 +13,7 @@ export const blogValidation=(blog:{title:string,content:string, image:string})=>
     const blogSchema= Joi.object({
         title:Joi.string().required(),
         content: Joi.string().required().min(5),
-        image: Joi.string().required()
+        image: Joi.string().optional()
     })
     return blogSchema.validate(blog);
 }
