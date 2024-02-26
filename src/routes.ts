@@ -52,8 +52,8 @@ router.post('/login',login);
 
 router.get('/secureRoute',passport.authenticate('jwt',{session:false}),secureRoute);
 
-router.post('/test',upload.single('image'),(req,res,next) => {
-    const img=req.file?.path;
-   res.send(img);
-})
+// router.post('/test',upload.single('image'),(req,res,next) => {
+//     const img=req.file?.path;
+//    res.send(img);
+// })
 export default router;

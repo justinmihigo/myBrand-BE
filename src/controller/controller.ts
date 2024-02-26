@@ -62,7 +62,12 @@ export const getPostById = async (req: Request, res: Response) => {
 export const updatePost = async (req: Request, res: Response) => {
   try {
       const id = req.params.id;
-      const blog = await Blog.findById(id);
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).send({ error: "Invalid blog ID" });
+    }
+    const blogId = new ObjectId(id); // Create an ObjectId
+
+    const blog = await Blog.findById(blogId); // Use the converted ObjectId
       if (!blog) {
           res.status(404).send({ error: "Blog not found" });
           return;
@@ -99,28 +104,28 @@ export const deletePost = async (req: Request, res: Response) => {
         res.status(500).send({ error: "Server error" });
       }
 };
-export const createComment=async(req:Request,res:Response)=>{
-  try {
-    const comment= await Blog.find({_id:req.params.id});
-    if (!comment){
-      res.status(404).send({error:'blog not found'});
-      return;
-    }
-    else{
-    const comment= new Comment({
-      name: req.body.name,
-      email: req.body.email,
-      comment: req.body.comment,
-      date: req.body.date
-    });
-    await comment.save();
-    res.send(comment);     
-  } 
-}
-  catch (error) {
-    res.status(500).send({message:"server not found"});
-  }
-}
+// export const createComment=async(req:Request,res:Response)=>{
+//   try {
+//     const comment= await Blog.find({_id:req.params.id});
+//     if (!comment){
+//       res.status(404).send({error:'blog not found'});
+//       return;
+//     }
+//     else{
+//     const comment= new Comment({
+//       name: req.body.name,
+//       email: req.body.email,
+//       comment: req.body.comment,
+//       date: req.body.date
+//     });
+//     await comment.save();
+//     res.status(200).send(comment);     
+//   } 
+// }
+//   catch (error) {
+//     res.status(500).send({message:"server not found"});
+//   }
+// }
 export const getAllComments= async(req:Request, res:Response)=>{
   try {
     const comments= await Comment.find();
@@ -183,6 +188,7 @@ export const commentCreate= async(req:Request, res:Response)=>{
     res.status(400).send({error: error.message});
     return;
   }
+  await newComment.save();
   await blog?.save();
   res.status(200).send({
     status:'created',

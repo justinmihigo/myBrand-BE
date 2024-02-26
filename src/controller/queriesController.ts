@@ -32,13 +32,13 @@ export const createQuery = async (req: Request, res: Response )=>{
 
 export const getQueryById = async (req: Request, res: Response) => {
     try {
-        let blog = await Queries.findOne({ _id: req.params.id });
+        let query = await Queries.findOne({ _id: req.params.id });
         // const comme=await Comment.findOne({blogId:req.params.id});
-        if (!blog) {
+        if (!query) {
           res.status(404).send({ error: "Query not found" });
           return;
         }
-        res.send(blog);
+        res.send(query);
       } catch (error) {
         res.status(500).send({ error: "Server error" });
       }
@@ -72,7 +72,7 @@ export const deleteQuery = async (req: Request, res: Response) => {
     try {
         const deletedQuery = await Queries.deleteOne({ _id: req.params.id });
         if (deletedQuery.deletedCount === 0) {
-          res.status(404).send({ error: "Blog not found" });
+          res.status(404).send({ error: "Query not found" });
           return;
         }
         res.status(204).send({message:'deleted successfully'});
