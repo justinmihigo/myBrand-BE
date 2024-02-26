@@ -51,7 +51,7 @@ export const register= async(req:Request, res: Response)=>{
     const uniqueEmail= await User.findOne({email:email});
    if (uniqueEmail){
     const error=new Error('email exists');
-    res.status(401).send(error.message);
+    res.status(400).send(error.message);
    }
    const {error}=validateSignup.validate(req.body);
    if(error) res.send({error:error.message});

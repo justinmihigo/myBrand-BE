@@ -15,13 +15,13 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.connection.close();
 }, 50000);
-//  describe("Creating account", () => {
-//     it("should create a new account", async() => {
-//         const response = await supertest(app).post("/api/signup")
-//             .send({username:"justin",email:"mihigo@gmail.com", password:'444'});
-//         expect(response.status).toBe(201);
-//     }) 
-// })
+ describe("Creating account", () => {
+    it("should create a new account", async() => {
+        const response = await supertest(app).post("/api/signup")
+            .send({username:"justin",email:"mihigo@gmail.com", password:'444'});
+        expect(response.status).toBe(400);
+    }) 
+})
 const id = '65da1b0d1557c2a2772f472e';
 describe("Logging in", () => {
   const token: { token: string } = { token: '' };
@@ -221,14 +221,19 @@ describe("Queries", () => {
     const response = await supertest(app).get('/api/queries/' + id);
     expect(response.status).toBe(404);
   })
-  it('should return delete a query', async () => {
+  it('should return 404 delete a query', async () => {
     const response = await supertest(app).delete('/api/queries/' + id);
     expect(response.status).toBe(404);
   })
-  it('should return create a query', async () => {
+  it('should return 200 create a query', async () => {
     const response = await supertest(app).post('/api/queries')
       .send({ email: "mihigojustin@gmail.com", query: "test", name: "justin" });
     expect(response.status).toBe(200);
+  })
+  it('should return 400 because email is missing when create a query', async () => {
+    const response = await supertest(app).post('/api/queries')
+      .send({ query: "test", name: "justin" });
+    expect(response.status).toBe(400);
   })
 })
 
