@@ -6,7 +6,7 @@ const password = process.env.MONGODB_PASSWORD || "";
 const realUri=uri?.replace('<password>',password);
 const dbConnection=async()=>{
     try {
-        // const uri="mongodb://127.0.0.1:27017/posts";
+        // const realUri="mongodb://127.0.0.1:27017/posts";
     (await mongoose.connect(realUri)).Connection;
     console.log('Database is connected');
     }
