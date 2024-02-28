@@ -18,7 +18,7 @@ export const getPosts = async (req: Request, res: Response) => {
 export const createPost = async (req: Request, res: Response )=>{
     try {
       const path=req.file?.path as string;
-        // const result=await cloudinary.uploader.upload(path);
+        //  const result=await cloudinary.uploader.upload(path);
         const blog = new Blog({
           title: req.body.title,
           // image: result?.secure_url,
@@ -32,7 +32,7 @@ export const createPost = async (req: Request, res: Response )=>{
         }
         const {error} = blogValidation(validate);
         if (error){
-          res.status(400).send({error:error.message});
+          res.status(400).send({error:error});
           return;
         }
         await blog.save();
