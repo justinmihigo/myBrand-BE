@@ -173,10 +173,18 @@ upload.single('image'),controller.createPost);
 router.get("/blogs/:id", controller.getPostById);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c:
+ * /api/blogs/{id}:
  *   get:
  *     summary: Returns the blog by id
  *     tags: [Blogs]
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c  
  *     responses:
  *       200:
  *         description: The list of the blogs
@@ -193,9 +201,17 @@ router.get("/blogs/:id", controller.getPostById);
 router.patch("/blogs/:id", passport.authenticate('jwt',{session:false}),controller.updatePost);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c:
+ * /api/blogs/{id}:
  *   patch:
  *     summary: Updates the blog
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c  
  *     security:
  *       - token: []
  *     tags: [Blogs]
@@ -223,17 +239,20 @@ router.patch("/blogs/:id", passport.authenticate('jwt',{session:false}),controll
 router.delete("/blogs/:id", passport.authenticate('jwt',{session:false}),controller.deletePost);
 /**
  * @swagger
- * /api/blogs/65cfbd536fb489f16bab1d46:
+ * /api/blogs/{id}:
  *   delete:
  *     summary: Delete the blog
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cfbd536fb489f16bab1d46 
  *     security:
  *       - token: []
- *     tags: [Blogs]
- *     parameters:
- *       name: id
- *       in: path
- *       description: id of a blog
- *       
+ *     tags: [Blogs]   
  *     responses:
  *       204:
  *         description: The blog was successfully deleted
@@ -253,9 +272,17 @@ router.delete("/blogs/:id", passport.authenticate('jwt',{session:false}),control
 router.post("/blogs/:id/comments",controller.commentCreate);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/comments:
+ * /api/blogs/{id}/comments:
  *   post:
  *     summary: Create a new comment
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c  
  *     tags: [Comments]
  *     requestBody:
  *       required: true
@@ -278,9 +305,17 @@ router.post("/blogs/:id/comments",controller.commentCreate);
 router.get("/blogs/:id/comments",controller.getAllComments);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/comments:
+ * /api/blogs/{id}/comments:
  *   get:
  *     summary: Returns the list of all the comments on a blog
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c  
  *     tags: [Comments]
  *     responses:
  *       200:
@@ -296,9 +331,24 @@ router.get("/blogs/:id/comments",controller.getAllComments);
 router.delete("/blogs/:id/comments/:id",controller.deleteComment);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/comments/65cee19c42b04655b54b9883:
+ * /api/blogs/${id}/comments/{commentId}:
  *   delete:
  *     summary: Deletes a comment on a blog
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c
+ *       - in: path       
+ *         name: commentId
+ *         description: id of the comment
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example:  65cee19c42b04655b54b9883
  *     tags: [Comments]
  *     responses:
  *       201:
@@ -317,9 +367,24 @@ router.delete("/blogs/:id/comments/:id",controller.deleteComment);
 router.get("/blogs/:id/comments/:id",controller.getCommentbyID);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/comments/65cee19c42b04655b54b9883:
+ * /api/blogs/{id}/comments/{commentId}:
  *   get:
  *     summary: Returns the comment on a blog
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c
+ *       - in: path       
+ *         name: commentId
+ *         description: id of the comment
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example:  65cee19c42b04655b54b9883
  *     tags: [Comments]
  *     responses:
  *       200:
@@ -340,9 +405,17 @@ router.patch("/blogs/:id/comments/:id",controller.updateComments);
 router.post("/blogs/:id/likes",likesController.addLike);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/likes:
+ * /api/blogs/{id}/likes:
  *   post:
  *     summary: Create a new like
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c   
  *     tags: [Likes]
  *     
  *     responses:
@@ -361,9 +434,17 @@ router.post("/blogs/:id/likes",likesController.addLike);
 router.get("/blogs/:id/likes",likesController.getLikes);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/likes:
+ * /api/blogs/{id}/likes:
  *   get:
  *     summary: Get likes
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c   
  *     tags: [Likes]
  *     
  *     responses:
@@ -378,11 +459,18 @@ router.get("/blogs/:id/likes",likesController.getLikes);
 router.delete("/blogs/:id/likes",likesController.deleteLike);
 /**
  * @swagger
- * /api/blogs/65cc9e41c313567174adb65c/likes:
+ * /api/blogs/{id}/likes:
  *   delete:
  *     summary: Delete a like
  *     tags: [Likes]
- *     
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cc9e41c313567174adb65c     
  *     responses:
  *       200:
  *         description: The Like was successfully deleted
@@ -445,10 +533,18 @@ router.get("/queries", queriesController.getQueries);
 router.get("/queries/:id", queriesController.getQueryById);
 /**
  * @swagger
- * /api/queries/65d383b137bf4821d6dc1d54:
+ * /api/queries/{id}:
  *   get:
  *     summary: Returns the Query by id
  *     tags: [Queries]
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65d383b137bf4821d6dc1d54
  *     responses:
  *       200:
  *         description: The returned query
@@ -466,10 +562,19 @@ router.get("/queries/:id", queriesController.getQueryById);
 router.delete("/queries/:id", queriesController.deleteQuery);
 /**
  * @swagger
- * /api/queries/65d383b137bf4821d6dc1d54:
+ * /api/queries/{id}:
  *   delete:
  *     summary: Delete the Query by id
  *     tags: [Queries]
+ *     parameters:
+ *       - in: path       
+ *         name: id
+ *         description: id of the blog
+ *         schema: 
+ *           type: string
+ *         required: true
+ *         example: 65cee19c42b04655b54b9883
+ *         
  *     responses:
  *       204:
  *         description: The query was successfully deleted

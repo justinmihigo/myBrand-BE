@@ -13,7 +13,7 @@ const realURI = DB_URI.replace("<password>", password);
 let server: http.Server;
 beforeAll(async () => {
   try{
-    server=app.listen(5000, () => {
+    server=app.listen(6000, () => {
    console.log("Server has started!");
     });
  }
