@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "node ./public/index.js",
+    "start": "node public/index.js",
     "build": "tsc"
   },
   "keywords": [],
