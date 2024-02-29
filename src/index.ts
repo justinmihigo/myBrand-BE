@@ -13,7 +13,7 @@ import swaggerUI,{SwaggerUiOptions} from "swagger-ui-express";
     app.use(express.json());
     app.use("/swagger",swaggerUI.serve,swaggerUI.setup(specs));
     app.use("/api", routes);
-    
+    app.get("/", (req, res) => res.send("Welcome to Justin's API!"));
      dbConnection(); 
     try{
         app.listen(5000, () => {
