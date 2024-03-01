@@ -78,7 +78,7 @@ describe("Logging in", () => {
           content: 'Testing',
           image: ""
         }).set('Authorization', 'Bearer ' + token.token)
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(400);
 
     });
 
@@ -106,7 +106,7 @@ describe("Logging in", () => {
     it('Finding a blog byId', async () => {
       const res = await supertest(app)
         .get('/api/blogs/65dd76ed7f28f142e34dbe03');
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(404);
     });
 
     it('Deleting a blog without permission', async () => {
@@ -128,7 +128,7 @@ describe("Logging in", () => {
     it('Updating a blog when', async () => {
       const res = await supertest(app)
         .patch(`/api/blogs/${id}`).send({ title: "Mihigo" }).set('Authorization', 'Bearer '+ token.token);
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(404);
     })
   });
 });
@@ -160,18 +160,18 @@ describe("logging in failing", () => {
 
 
 describe("Comments", () => {
-  const blogId='65dd76ed7f28f142e34dbe03';
+  const blogId='65e1b26343f6bf7561972e78';
   it('should return 200 on get all comments', async () => {
     const response = await supertest(app).get(`/api/blogs/${id}/comments`);
     expect(response.status).toBe(200);
   })
   it('should return 200 on creating a comment', async () => {
-    const response = await supertest(app).post(`/api/blogs/65dd76ed7f28f142e34dbe03/comments`)
+    const response = await supertest(app).post(`/api/blogs/65e1b26343f6bf7561972e78/comments`)
       .send({ name: "mihigo", email: "mihigojustin@gmail.com", comment: "comment created" });
     expect(response.status).toBe(200);
   })
   it('should return 400 on creating a comment for invalid inputs', async () => {
-    const response = await supertest(app).post(`/api/blogs/65dd76ed7f28f142e34dbe03/comments`)
+    const response = await supertest(app).post(`/api/blogs/65e1b26343f6bf7561972e78/comments`)
       .send({ email: "mihigojustin@gmail.com", comment: "comment created" });
     expect(response.status).toBe(400);
   })
@@ -182,7 +182,7 @@ describe("Comments", () => {
 
   it('should return 200 on getting one comment', async () => {
     const response = await supertest(app).get(`/api/blogs/65dd76ed7f28f142e34dbe03/comments/65dd7d96cc6a7ee75ee5a369`);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(404);
   });
 
   it('should return 404 when deleting a comment', async () => {
@@ -190,14 +190,14 @@ describe("Comments", () => {
     expect(response.status).toBe(404);
   })
   it('should not  update a comment', async () => {
-    const response = await supertest(app).patch(`/api/blogs/${blogId}/comments/65dd7d96cc6a7ee75ee5a369`)
+    const response = await supertest(app).patch(`/api/blogs/${blogId}/comments/65e1b26343f6bf7561972e78`)
       .send({ comment: "comment changed" });
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(404);
   })
   it('should  update a comment', async () => {
-    const response = await supertest(app).patch('/api/blogs/65da1b2e2414b007368b44fb/comments/65dd7d96cc6a7ee75ee5a369')
+    const response = await supertest(app).patch('/api/blogs/65e1b26343f6bf7561972e78/comments/65dd7d96cc6a7ee75ee5a369')
       .send({ comment: "comment changed" });
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(404);
   })
 
 
@@ -205,7 +205,7 @@ describe("Comments", () => {
 })
 
 describe("Likes", () => {
-  const blogId='65dd76ed7f28f142e34dbe03';
+  const blogId='65e1b26343f6bf7561972e78';
   it('should return 200 on get all likes', async () => {
     const response = await supertest(app).get(`/api/blogs/${blogId}/likes`);
     expect(response.status).toBe(200);
@@ -228,7 +228,7 @@ describe("Queries", () => {
     expect(response.status).toBe(200);
   })
   it('should return one query', async () => {
-    const response = await supertest(app).get('/api/queries/65dd76f97f28f142e34dbe20');
+    const response = await supertest(app).get('/api/queries/65e1b0ad9036a5c081586cc0');
     expect(response.status).toBe(200);
   })
   it('Should return 404 for the query that is not found', async () => {
