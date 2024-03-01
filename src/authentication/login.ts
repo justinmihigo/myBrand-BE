@@ -64,7 +64,7 @@ export const register= async(req:Request, res: Response)=>{
     })
     if(!uniqueEmail){
     await newUser.save();
-   res.status(201).send("user saved successfully");
+res.status(201).send({message:"user saved successfully"});
     }
 }
 export const login= async(req:Request, res:Response, next:NextFunction)=>{
@@ -85,7 +85,7 @@ export const login= async(req:Request, res:Response, next:NextFunction)=>{
         res.status(201).send({message:"Login successfull", token:token, id:id});
     }
     else{
-        res.status(400).send("password doesn't match");
+        res.status(400).send({message:"password doesn't match"});
         return;
     }
 }
