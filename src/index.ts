@@ -4,15 +4,18 @@ import passport from "passport";
 import dbConnection from "./config/db"
 import bodyParser from "body-parser";
 import specs from "./documentation/swagger";
+import cors from "cors";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI,{SwaggerUiOptions} from "swagger-ui-express";
     const app: Express = express();
     app.use(bodyParser.json());
+    app.use(cors());
     app.use(passport.initialize());
     app.use(bodyParser.urlencoded({ extended:false}));
     app.use(express.json());
     app.use("/swagger",swaggerUI.serve,swaggerUI.setup(specs));
     app.use("/api", routes);
+    
     app.get("/", (req, res) => res.send("Welcome to Justin's API!"));
      dbConnection(); 
     try{
