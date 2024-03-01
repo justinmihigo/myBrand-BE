@@ -7,13 +7,13 @@ const options = {
 			version: "1.0.0",
 			description: "Backend for my portfolio",
 		},
-		servers: [
-			{
-				url: "http://localhost:5000",
-			},
-		],
+		// servers: [
+		// 	{
+		// 		url: "https://mybrand-be-1-mzvx.onrender.com/ ",
+		// 	},
+		// ],
 	},
-	apis: ["./public/*.js"],
+	 apis: ["./public/*.js"],
 };
 const specs=swaggerJSDoc(options);
 

@@ -198,7 +198,7 @@ router.get("/blogs/:id", controller.getPostById);
  *         description: The book was not found
  */
 
-router.patch("/blogs/:id", passport.authenticate('jwt',{session:false}),controller.updatePost);
+router.patch("/blogs/:id", passport.authenticate('jwt',{session:false}),upload.single('image'),controller.updatePost);
 /**
  * @swagger
  * /api/blogs/{id}:
@@ -218,9 +218,18 @@ router.patch("/blogs/:id", passport.authenticate('jwt',{session:false}),controll
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Blogs'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string 
+ *               image:
+ *                 type: string 
+ *                 format: binary
+ *                 description: image of a blog
  *     responses:
  *       201:
  *         description: The blog was successfully updated
@@ -254,7 +263,7 @@ router.delete("/blogs/:id", passport.authenticate('jwt',{session:false}),control
  *       - token: []
  *     tags: [Blogs]   
  *     responses:
- *       204:
+ *       200:
  *         description: The blog was successfully deleted
  *         content:
  *           application/json:

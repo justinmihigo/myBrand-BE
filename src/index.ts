@@ -5,11 +5,13 @@ import dbConnection from "./config/db"
 import bodyParser from "body-parser";
 import specs from "./documentation/swagger";
 import cors from "cors";
+import morgan from "morgan"
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI,{SwaggerUiOptions} from "swagger-ui-express";
     const app: Express = express();
     app.use(bodyParser.json());
     app.use(cors());
+    app.use(morgan("dev"));
     app.use(passport.initialize());
     app.use(bodyParser.urlencoded({ extended:false}));
     app.use(express.json());
