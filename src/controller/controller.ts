@@ -18,11 +18,11 @@ export const getPosts = async (req: Request, res: Response) => {
 export const createPost = async (req: Request, res: Response )=>{
     try {
       const path=req.file?.path as string;
-        //  const result=await cloudinary.uploader.upload(path);
+          const result=await cloudinary.uploader.upload(path);
         const blog = new Blog({
           title: req.body.title,
-          // image: result?.secure_url,
-          image: path,
+           image: result?.secure_url,
+          // image: path,
           content: req.body.content
         });
         const validate={
@@ -99,7 +99,7 @@ export const deletePost = async (req: Request, res: Response) => {
           res.status(404).send({ error: "Blog not found" });
           return;
         }
-        res.status(204).send({message: "Blog deleted successfully"});
+        res.status(200).send({message: "Blog deleted successfully"});
       } catch (error) {
         res.status(500).send({ error: "Server error" });
       }
