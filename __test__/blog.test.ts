@@ -21,7 +21,7 @@ catch(error){
  console.error("Error Starting the server:", error);
 }
   (await mongoose.connect(realURI)).Connection;
-});
+}, 50000);
 afterAll(async () => {
   if(server){
     server.close();
@@ -105,8 +105,8 @@ describe("Logging in", () => {
 
     it('Finding a blog byId', async () => {
       const res = await supertest(app)
-        .get('/api/blogs/65dd76ed7f28f142e34dbe03');
-      expect(res.status).toBe(404);
+        .get('/api/blogs/65e1cd417d933eb6502353cd');
+      expect(res.status).toBe(200);
     });
 
     it('Deleting a blog without permission', async () => {
@@ -130,6 +130,13 @@ describe("Logging in", () => {
         .patch(`/api/blogs/${id}`).send({ title: "Mihigo" }).set('Authorization', 'Bearer '+ token.token);
       expect(res.status).toBe(404);
     })
+    
+    it('Updating a blog', async () => {
+      const res = await supertest(app)
+        .patch(`/api/blogs/65e1cd417d933eb6502353cd`).send({ title: "Mihigo" })
+        .set('Authorization', 'Bearer '+ token.token)
+      expect(res.status).toBe(201);
+    }, 10000);
   });
 });
 
@@ -181,8 +188,8 @@ describe("Comments", () => {
   });
 
   it('should return 200 on getting one comment', async () => {
-    const response = await supertest(app).get(`/api/blogs/65dd76ed7f28f142e34dbe03/comments/65dd7d96cc6a7ee75ee5a369`);
-    expect(response.status).toBe(404);
+    const response = await supertest(app).get(`/api/blogs/${blogId}/comments/65e1e1f1cf5ce7a7848456d8`);
+    expect(response.status).toBe(200);
   });
 
   it('should return 404 when deleting a comment', async () => {
@@ -195,9 +202,9 @@ describe("Comments", () => {
     expect(response.status).toBe(404);
   })
   it('should  update a comment', async () => {
-    const response = await supertest(app).patch('/api/blogs/65e1b26343f6bf7561972e78/comments/65dd7d96cc6a7ee75ee5a369')
+    const response = await supertest(app).patch('/api/blogs/65e1b26343f6bf7561972e78/comments/65e1e1f1cf5ce7a7848456d8')
       .send({ comment: "comment changed" });
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(201);
   })
 
 
