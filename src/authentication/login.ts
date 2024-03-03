@@ -51,7 +51,7 @@ export const register= async(req:Request, res: Response)=>{
     const uniqueEmail= await User.findOne({email:email});
    if (uniqueEmail){
     const error=new Error('email exists');
-    res.status(400).send(error.message);
+    res.status(400).send({error:error.message});
    }
    const {error}=validateSignup.validate(req.body);
    if(error) res.send({error:error.message});
@@ -75,7 +75,8 @@ export const login= async(req:Request, res:Response, next:NextFunction)=>{
     const username= user?.username;
     const id=user?._id;
     if(!user){
-        res.send(400).send("User not found");
+        res.send(400).send({message:"User not found"});
+        return;
     }
     const hashedPassword=user?.password as string;
     const isMatch = await bcrypt.compare(password, hashedPassword);
@@ -90,7 +91,7 @@ export const login= async(req:Request, res:Response, next:NextFunction)=>{
     }
 }
 catch(err){
-    res.status(500);
+    res.status(500).send({message:"bad request"});
 }
 }
 export const secureRoute= async(req:Request, res:Response, next:NextFunction)=>{

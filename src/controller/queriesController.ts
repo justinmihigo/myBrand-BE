@@ -4,7 +4,7 @@ import { queryValidation } from "../utils/validation";
 export const getQueries = async (req: Request, res: Response) => {
     try {
         const queries = await Queries.find();
-        res.send(queries);
+        res.send({queries});
       } catch (error) {
         res.status(500).send({ error: "Server error" });
       }

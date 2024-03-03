@@ -129,7 +129,7 @@ export const deletePost = async (req: Request, res: Response) => {
 export const getAllComments= async(req:Request, res:Response)=>{
   try {
     const comments= await Comment.find();
-    res.send(comments);
+    res.send({comments});
   } catch (error) {
     res.status(404).send({comment:"not found"});
   }
@@ -146,7 +146,7 @@ export const deleteComment= async(req:Request, res: Response)=>{
     res.status(201).send({message: "comment deleted successfully"});
     }
   } catch (error){
-    res.status(500).send("server no found")
+    res.status(500).send({error:"server no found"})
   }
 }
 export const getCommentbyID= async(req:Request, res: Response)=>{
@@ -160,7 +160,7 @@ export const getCommentbyID= async(req:Request, res: Response)=>{
     res.send(comment);
     }
   } catch (error){
-    res.status(500).send("server no found")
+    res.status(500).send({error:"server no found"})
   }
 }
 
@@ -219,7 +219,7 @@ export const updateComments= async(req:Request, res:Response)=>{
     return res.status(201).send({message:"comment updated"});
   
   } catch (error) {
-    res.status(500).send({message:"error updating comment"})
+    res.status(500).send({error:"error updating comment"})
   }
   
 }

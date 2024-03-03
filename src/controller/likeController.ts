@@ -15,7 +15,7 @@ export const addLike= async(req:Request, res: Response)=>{
         blog.likes+=1;
     }
     await blog?.save();
-    return res.status(200).json(blog);
+    return res.status(200).json({blog});
    
 };
 export const getLikes= async(req:Request, res: Response)=>{
