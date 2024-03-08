@@ -176,8 +176,8 @@ export const commentCreate= async(req:Request, res:Response)=>{
  }
  const blog= await Blog.findById(blogId);
   if(!blog){
-    
   res.status(404).json({messsage:"blog not found"});
+  return;
 }
   // const comments= blog?.comments;
   const newComment= new Comment({

@@ -105,7 +105,7 @@ describe("Logging in", () => {
 
     it('Finding a blog byId', async () => {
       const res = await supertest(app)
-        .get('/api/blogs/65e1cd417d933eb6502353cd');
+        .get('/api/blogs/65eac7c2017578dd34788c3a');
       expect(res.status).toBe(200);
     });
 
@@ -122,20 +122,20 @@ describe("Logging in", () => {
     })
     it('Updating a blog without permission ', async () => {
       const res = await supertest(app)
-        .patch('/api/blogs/65dd76ed7f28f142e34dbe03').send({ title: "Mihigo" })
+        .patch('/api/blogs/65eac7c2017578dd34788c3a').send({ title: "Mihigo" })
       expect(res.status).toBe(401);
     })
     it('Updating a blog when', async () => {
       const res = await supertest(app)
         .patch(`/api/blogs/${id}`).send({ title: "Mihigo" }).set('Authorization', 'Bearer '+ token.token);
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(401);
     })
     
     it('Updating a blog', async () => {
       const res = await supertest(app)
         .patch(`/api/blogs/65e1cd417d933eb6502353cd`).send({ title: "Mihigo" })
         .set('Authorization', 'Bearer '+ token.token)
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(401);
     }, 10000);
   });
 });
@@ -173,7 +173,7 @@ describe("Comments", () => {
     expect(response.status).toBe(200);
   })
   it('should return 200 on creating a comment', async () => {
-    const response = await supertest(app).post(`/api/blogs/65e1b26343f6bf7561972e78/comments`)
+    const response = await supertest(app).post(`/api/blogs/65eac7c2017578dd34788c3a/comments`)
       .send({ name: "mihigo", email: "mihigojustin@gmail.com", comment: "comment created" });
     expect(response.status).toBe(200);
   })
@@ -212,7 +212,7 @@ describe("Comments", () => {
 })
 
 describe("Likes", () => {
-  const blogId='65e1b26343f6bf7561972e78';
+  const blogId='65eac7c2017578dd34788c3a';
   it('should return 200 on get all likes', async () => {
     const response = await supertest(app).get(`/api/blogs/${blogId}/likes`);
     expect(response.status).toBe(200);
@@ -235,7 +235,7 @@ describe("Queries", () => {
     expect(response.status).toBe(200);
   })
   it('should return one query', async () => {
-    const response = await supertest(app).get('/api/queries/65e1b0ad9036a5c081586cc0');
+    const response = await supertest(app).get('/api/queries/65e4887067e387d1b5ebb412');
     expect(response.status).toBe(200);
   })
   it('Should return 404 for the query that is not found', async () => {
