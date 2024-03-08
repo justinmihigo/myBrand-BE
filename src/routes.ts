@@ -585,7 +585,7 @@ router.delete("/queries/:id", queriesController.deleteQuery);
  *         example: 65cee19c42b04655b54b9883
  *         
  *     responses:
- *       204:
+ *       200:
  *         description: The query was successfully deleted
  *       400:
  *         description: The invalid request

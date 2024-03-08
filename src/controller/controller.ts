@@ -21,8 +21,8 @@ export const createPost = async (req: Request, res: Response )=>{
           const result=await cloudinary.uploader.upload(path);
         const blog = new Blog({
           title: req.body.title,
-           image: result?.secure_url,
-          // image: path,
+          image: result?.secure_url,
+          //  image: path,
           content: req.body.content
         });
         const validate={
@@ -61,6 +61,9 @@ export const getPostById = async (req: Request, res: Response) => {
 
 export const updatePost = async (req: Request, res: Response) => {
   try {
+    if(res.status(401)){
+      return res.status(401).send({error:'unauthorized'});
+    }
       const id = req.params.id;
       if (!ObjectId.isValid(id)) {
         return res.status(400).send({ error: "Invalid blog ID" });
