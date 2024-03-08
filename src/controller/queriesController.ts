@@ -75,7 +75,7 @@ export const deleteQuery = async (req: Request, res: Response) => {
           res.status(404).send({ error: "Query not found" });
           return;
         }
-        res.status(204).send({message:'deleted successfully'});
+        res.status(200).send({message:'deleted successfully'});
       } catch (error) {
         res.status(500).send({ error: "Server error" });
       }

@@ -7,7 +7,8 @@ const schema= new Schema<IBlog>({
     content: String,
     image:String,
     comments:[Commentschema],
-    likes:{ type:Number, default:0}
+    likes:{ type:Number, default:0},
+    date: {type: Date, default: new Date()}
 })
 const blog=mongoose.model("Blog",schema);
 export default blog;
