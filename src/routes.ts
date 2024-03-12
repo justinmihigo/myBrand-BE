@@ -337,10 +337,10 @@ router.get("/blogs/:id/comments",controller.getAllComments);
  *                 $ref: '#/components/schemas/Comments'
  */
 
-router.delete("/blogs/:id/comments/:id",controller.deleteComment);
+router.delete("/blogs/:id/comments/:commentId",controller.deleteComment);
 /**
  * @swagger
- * /api/blogs/${id}/comments/{commentId}:
+ * /api/blogs/{id}/comments/{commentId}:
  *   delete:
  *     summary: Deletes a comment on a blog
  *     parameters:

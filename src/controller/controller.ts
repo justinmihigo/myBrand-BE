@@ -5,107 +5,108 @@ import cloudinary from "../utils/cloudinary";
 import upload from "../config/multer";
 import { blogValidation, commentValidation } from "../utils/validation";
 import { ObjectId } from "mongodb";
+import IComment from "../types/commentTypes";
 import mongoose from "mongoose";
 export const getPosts = async (req: Request, res: Response) => {
-    try {
-        const blogs = await Blog.find();
-        res.send(blogs);
-      } catch (error) {
-        res.status(500).send({ error: "Server error" });
-      }
+  try {
+    const blogs = await Blog.find();
+    res.send(blogs);
+  } catch (error) {
+    res.status(500).send({ error: "Server error" });
+  }
 };
 
-export const createPost = async (req: Request, res: Response )=>{
-    try {
-      const path=req.file?.path as string;
-          const result=await cloudinary.uploader.upload(path);
-        const blog = new Blog({
-          title: req.body.title,
-          image: result?.secure_url,
-          //  image: path,
-          content: req.body.content
-        });
-        const validate={
-          title: req.body.title,
-          content:req.body.content,
-          image: path
-        }
-        const {error} = blogValidation(validate);
-        if (error){
-          res.status(400).send({error:error});
-          return;
-        }
-        await blog.save();
-        res.status(200).send({message: "blog saved successfully",blog});
-      } 
-      catch (error) {
-        res.status(400).send({ error: "Invalid request" });
-        console.log(error);
-      }
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    const path = req.file?.path as string;
+    const result = await cloudinary.uploader.upload(path);
+    const blog = new Blog({
+      title: req.body.title,
+      image: result?.secure_url,
+      //  image: path,
+      content: req.body.content
+    });
+    const validate = {
+      title: req.body.title,
+      content: req.body.content,
+      image: path
+    }
+    const { error } = blogValidation(validate);
+    if (error) {
+      res.status(400).send({ error: error });
+      return;
+    }
+    await blog.save();
+    res.status(200).send({ message: "blog saved successfully", blog });
+  }
+  catch (error) {
+    res.status(400).send({ error: "Invalid request" });
+    console.log(error);
+  }
 };
 
 export const getPostById = async (req: Request, res: Response) => {
-    try {
-        let blog = await Blog.findOne({ _id: req.params.id });
-        // const comme=await Comment.findOne({blogId:req.params.id});
-        if (!blog) {
-          res.status(404).send({ error: "blog not found" });
-          return;
-        }
-        res.send(blog);
-      } catch (error) {
-        res.status(500).send({ error: "Server error" });
-        console.log(error);
-      }
+  try {
+    let blog = await Blog.findOne({ _id: req.params.id });
+    // const comme=await Comment.findOne({blogId:req.params.id});
+    if (!blog) {
+      res.status(404).send({ error: "blog not found" });
+      return;
+    }
+    res.send(blog);
+  } catch (error) {
+    res.status(500).send({ error: "Server error" });
+    console.log(error);
+  }
 };
 
 export const updatePost = async (req: Request, res: Response) => {
   try {
-    if(res.status(401)){
-      return res.status(401).send({error:'unauthorized'});
-    }
-      const id = req.params.id;
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).send({ error: "Invalid blog ID" });
+    const id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid blog ID" });
     }
     const blogId = new ObjectId(id); // Create an ObjectId
 
     const blog = await Blog.findById(blogId); // Use the converted ObjectId
-      if (!blog) {
-          res.status(404).send({ error: "Blog not found" });
-          return;
-      }
-      if (req.body.title) {
-          blog.title = req.body.title;
-      }
-      if (req.body.content) {
-          blog.content = req.body.content;
-      }
-      if (req.file?.path) {
-          const path = req.file?.path as string;
-          const result = await cloudinary.uploader.upload(path);
-          blog.image = result?.secure_url;
-      }
-      await blog.save();
-      res.status(201).send({ message: "blog updated successfully", blog });
+    if (!blog) {
+      res.status(404).send({ error: "Blog not found" });
+      return;
+    }
+    if (req.body.title) {
+      blog.title = req.body.title;
+    }
+    if (req.body.content) {
+      blog.content = req.body.content;
+    }
+    if (req.file?.path) {
+      const path = req.file?.path as string;
+      const result = await cloudinary.uploader.upload(path);
+      blog.image = result?.secure_url;
+    }
+    //   if(res.status(401)){
+    //   return res.status(401).send({error:'unauthorized'});
+    //  }
+    await blog.save();
+    res.status(201).send({ message: "blog updated successfully", blog });
   } catch (error) {
-      res.status(500).send({ error: "Server error" });
-      console.log(error);
+    res.status(500).send({ error: "Server error" });
+    console.log(error);
   }
 };
 
 
 export const deletePost = async (req: Request, res: Response) => {
-    try {
-        const deletedBlog = await Blog.deleteOne({ _id: req.params.id });
-        if (deletedBlog.deletedCount === 0) {
-          res.status(404).send({ error: "Blog not found" });
-          return;
-        }
-        res.status(200).send({message: "Blog deleted successfully"});
-      } catch (error) {
-        res.status(500).send({ error: "Server error" });
-      }
+  try {
+    const deletedBlog = await Blog.deleteOne({ _id: req.params.id });
+    if (deletedBlog.deletedCount === 0) {
+      res.status(404).send({ error: "Blog not found" });
+      return;
+    }
+    res.status(200).send({ message: "Blog deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ error: "Server error" });
+  }
 };
 // export const createComment=async(req:Request,res:Response)=>{
 //   try {
@@ -129,100 +130,141 @@ export const deletePost = async (req: Request, res: Response) => {
 //     res.status(500).send({message:"server not found"});
 //   }
 // }
-export const getAllComments= async(req:Request, res:Response)=>{
+export const getAllComments = async (req: Request, res: Response) => {
   try {
-    const comments= await Comment.find();
-    res.send({comments});
+    const comments = await Comment.find();
+    res.send({ comments });
   } catch (error) {
-    res.status(404).send({comment:"not found"});
+    res.status(404).send({ comment: "not found" });
   }
 };
 
-export const deleteComment= async(req:Request, res: Response)=>{
+export const deleteComment = async (req: Request, res: Response) => {
   try {
-    const comment = await Comment.deleteOne({_id:req.params.id});
-    if (!comment){
-      res.status(404).send({message:'comment not found'});
+    const blogId = req.params.id;
+    const commentId = req.params.commentId;
+    const comm=await Comment.findOne({ _id: req.params.commentId });
+    console.log(comm);
+    const comment = await Comment.deleteOne({ _id: req.params.commentId });
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      res.status(404).json({ messsage: "blog not found" });
       return;
     }
-    else{
-    res.status(201).send({message: "comment deleted successfully"});
+    if (!comment) {
+      res.status(404).send({ message: 'comment not found' });
+      return;
     }
-  } catch (error){
-    res.status(500).send({error:"server no found"})
+    else {
+      blog.comments = blog.comments.filter((comment:IComment) => comment._id.toString() !== commentId);
+      console.log(blog.comments);
+      await blog?.save();
+      res.status(201).send({ message: "comment deleted successfully" });
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: "server no found" })
   }
 }
-export const getCommentbyID= async(req:Request, res: Response)=>{
+// export const deleteComment = async (req: Request, res: Response) => {
+//   try {
+//     const blogId = req.params.id;
+//     const commentId = req.params.commentId;
+//     console.log(blogId, commentId)
+//     const blog = await Blog.findById(blogId);
+//     const commentBlog = await Comment.findById({_id:commentId});
+//     console.log(commentBlog);
+//     if (!blog) {
+//       return res.status(404).json({ message: "Blog not found" });
+//     }
+
+//     // const index = blog.comments.findIndex((comment: { _id: { toString: () => string; }; }) => comment._id.toString() === commentId);
+//     // if (index === -1) {
+//     //   return res.status(404).json({ message: "Comment not found" });
+//     // }
+
+//     // blog.comments.splice(index, 1); // Remove the comment from the array
+
+//     // await blog.save(); // Save the updated blog
+
+//     return res.status(200).json({ message: "Comment deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+export const getCommentbyID = async (req: Request, res: Response) => {
   try {
-    const comment = await Comment.findOne({_id:req.params.id});
-    if (!comment){
-      res.status(404).send({message:'comment not found'});
+    const comment = await Comment.findOne({ _id: req.params.id });
+    if (!comment) {
+      res.status(404).send({ message: 'comment not found' });
       return;
     }
-    else{
-    res.send(comment);
+    else {
+      res.send(comment);
     }
-  } catch (error){
-    res.status(500).send({error:"server no found"})
+  } catch (error) {
+    res.status(500).send({ error: "server no found" })
   }
 }
 
-export const commentCreate= async(req:Request, res:Response)=>{
+export const commentCreate = async (req: Request, res: Response) => {
   try {
-    const blogId=req.params.id;
- const {name,email,comment}=req.body;
- if(!name || !email || !comment){
-  return res.status(400).send({message:'invalid inputs'});
- }
- const blog= await Blog.findById(blogId);
-  if(!blog){
-  res.status(404).json({messsage:"blog not found"});
-  return;
-}
-  // const comments= blog?.comments;
-  const newComment= new Comment({
-    name,
-    email,
-    comment
-  });
-  blog?.comments.push(newComment);
- const {error}= commentValidation(req.body);
-  if(error){
-    res.status(400).send({error: error.message});
-    return;
-  }
-  await newComment.save();
-  await blog?.save();
-  res.status(200).send({
-    status:'created',
-    data: blog
-  })
+    const blogId = req.params.id;
+    const { name, email, comment } = req.body;
+    if (!name || !email || !comment) {
+      return res.status(400).send({ message: 'invalid inputs' });
+    }
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      res.status(404).json({ messsage: "blog not found" });
+      return;
+    }
+    // const comments= blog?.comments;
+    const newComment = new Comment({
+      name,
+      email,
+      comment
+    });
+    blog?.comments.push(newComment);
+    const { error } = commentValidation(req.body);
+    if (error) {
+      res.status(400).send({ error: error.message });
+      return;
+    }
+    await newComment.save();
+    await blog?.save();
+    res.status(200).send({
+      status: 'created',
+      data: blog
+    })
   } catch (error) {
     console.log(error);
-    res.status(500).send({error:'server not found'});
+    res.status(500).send({ error: 'server not found' });
   }
- 
+
 }
-export const getComments= async(req:Request, res:Response)=>{
-  const comments= await Comment.find();
-  
+export const getComments = async (req: Request, res: Response) => {
+  const comments = await Comment.find();
+
 }
-export const updateComments= async(req:Request, res:Response)=>{
+export const updateComments = async (req: Request, res: Response) => {
   try {
-    const acomment= await Comment.findOne({_id:req.params.id});
-    const{email, comment, name}= req.body;
-  if(!acomment){
-    return res.status(404).send({message:"comment not found"});
-  }
-  if(email) acomment.email=email;
-  if(name) acomment.name=name;
-  if (comment) acomment.comment=comment;
+    const acomment = await Comment.findOne({ _id: req.params.id });
+    const { email, comment, name } = req.body;
+    if (!acomment) {
+      return res.status(404).send({ message: "comment not found" });
+    }
+    if (email) acomment.email = email;
+    if (name) acomment.name = name;
+    if (comment) acomment.comment = comment;
     acomment.save();
-  
-    return res.status(201).send({message:"comment updated"});
-  
+
+    return res.status(201).send({ message: "comment updated" });
+
   } catch (error) {
-    res.status(500).send({error:"error updating comment"})
+    res.status(500).send({ error: "error updating comment" })
   }
-  
+
 }
